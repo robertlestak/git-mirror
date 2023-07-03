@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: git-mirrord
+  namespace: default
+data:
+  config.yaml: |
+    sync:
+    - schedule: "10m"
+      name: "example"
+      sync:
+        repos:
+        - url: "https://example.com/example/hello.git"
+        - url: "https://example.com/example/world.git"

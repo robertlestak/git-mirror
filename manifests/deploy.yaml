@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: git-mirrord
+  namespace: default
+  labels:
+    app: git-mirrord
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: git-mirrord
+  template:
+    metadata:
+      labels:
+        app: git-mirrord
+    spec:
+      containers:
+      - name: git-mirrord
+        image: registry.shdw.tech/git-mirrord:latest
+        imagePullPolicy: Always
+        args:
+        - -config
+        - /etc/git-mirrord/config.yaml
+        env:
+        - name: LOG_LEVEL
+          value: "info"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+        volumeMounts:
+        - name: config
+          mountPath: /etc/git-mirrord
+        - name: ssh
+          mountPath: /root/.ssh
+          readOnly: true
+        - name: netrc
+          mountPath: /root/.netrc
+          readOnly: true
+          subPath: .netrc
+      volumes:
+      - name: config
+        configMap:
+          name: git-mirrord
+          items:
+          - key: config.yaml
+            path: config.yaml
+      - name: ssh
+        secret:
+          secretName: git-mirrord-ssh
+      - name: netrc
+        secret:
+          secretName: git-mirrord-netrc

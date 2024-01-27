@@ -21,6 +21,7 @@ type SyncConfig struct {
 }
 
 type Config struct {
+	Workers int           `yaml:"workers"`
 	WorkDir string        `yaml:"workdir"`
 	Syncs   []*SyncConfig `yaml:"sync"`
 }

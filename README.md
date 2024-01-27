@@ -33,6 +33,7 @@ If the `-force` flag is provided, it will force push to all repos, regardless of
 ### config.yaml
 
 ```yaml
+workers: 20 # number of workers to use, defaults to 10
 sync:
 - schedule: "10m"
   name: "hello-world"

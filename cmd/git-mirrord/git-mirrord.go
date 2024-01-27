@@ -41,6 +41,7 @@ func main() {
 	l.Debug("start")
 	logLevel := flag.String("log-level", log.GetLevel().String(), "log level")
 	configFile := flag.String("config", "config.yaml", "config file")
+	workers := flag.Int("workers", 10, "number of workers")
 	flag.Parse()
 	ll, err := log.ParseLevel(*logLevel)
 	if err != nil {
@@ -58,7 +59,10 @@ func main() {
 	if len(config.C.Syncs) == 0 {
 		l.Fatal("no syncs configured")
 	}
-	workerCount := 10
+	workerCount := *workers
+	if config.C.Workers > 0 {
+		workerCount = config.C.Workers
+	}
 	if len(config.C.Syncs) < workerCount {
 		workerCount = len(config.C.Syncs)
 	}

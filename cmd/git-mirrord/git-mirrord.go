@@ -76,6 +76,9 @@ func main() {
 		var pendingJobCount int
 		for _, s := range config.C.Syncs {
 			sched := s.Schedule
+			if config.C.WorkDir != "" {
+				s.Sync.WorkDir = config.C.WorkDir
+			}
 			if s.LastRun.Add(time.Duration(sched)).After(time.Now()) {
 				continue
 			}

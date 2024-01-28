@@ -85,7 +85,7 @@ func main() {
 		for i := 0; i < pendingJobCount; i++ {
 			err := <-errors
 			if err != nil {
-				l.WithError(err).Fatal("sync failed")
+				l.WithError(err).Error("sync failed")
 			}
 		}
 		l.Debug("sleeping")

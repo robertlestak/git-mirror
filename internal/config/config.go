@@ -26,6 +26,10 @@ type Config struct {
 	Syncs   []*SyncConfig `yaml:"sync"`
 }
 
+func (s *SyncConfig) Cleanup() error {
+	return s.Sync.Cleanup()
+}
+
 func LoadFile(f string) error {
 	l := log.WithFields(log.Fields{
 		"app": "git-mirror",

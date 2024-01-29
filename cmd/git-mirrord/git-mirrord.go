@@ -27,9 +27,11 @@ func syncWorker(jobs chan *config.SyncConfig, errors chan error) {
 		if err := s.Sync.Run(); err != nil {
 			s.LastRun = time.Now()
 			errors <- err
+			s.Sync.Cleanup()
 			continue
 		}
 		s.LastRun = time.Now()
+		s.Sync.Cleanup()
 		errors <- nil
 	}
 }

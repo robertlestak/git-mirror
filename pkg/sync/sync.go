@@ -36,7 +36,7 @@ func (r *GitRepo) Clone() error {
 	}
 	r.Workdir = tmpDir
 	l.Debugf("cloning into %s", tmpDir)
-	cmd := exec.Command("git", "clone", r.Url, tmpDir)
+	cmd := exec.Command("git", "clone", "--mirror", r.Url, tmpDir)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
@@ -44,8 +44,8 @@ func (r *GitRepo) Clone() error {
 		l.WithError(err).Error("failed to clone repo")
 		return err
 	}
-	// fetch all remote branches
-	l.Debug("fetching all branches")
+	// pull all remote branches, including those not in the local repo
+	l.Debug("pulling all branches")
 	cmd = exec.Command("git", "fetch", "--all")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -113,7 +113,7 @@ func (r *GitRepo) MirrorTo(dest *GitRepo) error {
 		"fn":  "MirrorTo",
 	})
 	l.Debug("start")
-	cmd := exec.Command("git", "push", "--mirror", dest.Url)
+	cmd := exec.Command("git", "push", "--mirror", "--force", dest.Url)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Dir = r.Workdir
